@@ -1,0 +1,238 @@
+{% extends "dashboard/layout.html" %}
+
+{% block title %}
+    Statistics
+{% endblock %}
+
+{% block content %}
+
+    <div class="header">Descriptive Statistics</div>
+    <div class="chart-area">
+        <div class="supplier-customer-area">
+            <div class="supplier-charts">
+                <div class="header-statistics">Supplier Statistics</div>
+                <div class="supplier-chart-1">
+                    <canvas id="supplierOperatingChart" role="img"></canvas>
+                </div>
+                <div class="supplier-chart-2">
+                    <canvas id="supplierCapacityChart" role="img"></canvas>
+                </div>
+            </div>   
+            <div class="customer-charts">
+                <div class="header-statistics">Customer Statistics</div>
+                <div class="customer-chart-1">
+                    <canvas id="customerRegionChart" role="img"></canvas>
+                </div>
+                <div class="customer-chart-2">
+                    <canvas id="customerDemandChart" role="img"></canvas>
+                </div>
+            </div>
+        </div>
+        <!--
+            <div class="shipping-charts">
+            <div class="header-statistics">Shipping Statistics</div>
+            <div class="shipping-chart-1">
+                <canvas id="myChart5" role="img"></canvas>
+            </div>
+        </div>
+        -->
+    </div>
+
+    <!--{{customer_names | json_script:'customer_names_json'}}-->
+
+    <!--<input type="hidden" id="customer_names" name="variable" value="{{ customer_names|safe }}">
+    <input type="hidden" id="customer_demands" name="variable" value="{{ customer_demands|safe }}">-->
+
+    <script>
+
+        //Global Options
+        Chart.defaults.global.defaultFontFamily = 'Montserrat';
+
+        var ctx = document.getElementById('supplierOperatingChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{supplier_names|safe}},
+                datasets: [{
+                    label: 'Dataset',
+                    backgroundColor: ["rgb(97, 187, 182, 0.9)",
+                                        "rgb(74, 59, 133, 0.9)",
+                                        "rgb(173, 86, 205, 0.9)",
+                                        "rgb(161, 223, 255, 0.9)",
+                                        "rgb(62, 149, 205, 0.9)", 
+                                        "rgb(142, 94, 162, 0.9)",
+                                        "rgb(60, 186, 159, 0.9)",
+                                        "rgb(0, 137, 150, 0.9)",
+                                        "rgb(201, 76, 190, 0.9)",
+                                        "rgb(22, 184, 243, 0.9)"],
+                    borderColor: '#4a3b85',
+                    data: {{supplier_operating_costs|safe}}
+                }]
+            },
+
+            options: {
+                title:{
+                    display: true,
+                    text: 'Operating Costs by Potential Suppliers',
+                    fontSize: 14,
+                    fontColor: "#575a61"
+                },
+                legend:{
+                    display: false,
+                    position: 'right'
+                }
+            }
+        });
+
+        var ctx = document.getElementById('supplierCapacityChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: {{supplier_capacities|safe}},
+                datasets: [{
+                    label: 'Dataset',
+                    backgroundColor: ["rgb(97, 187, 182, 0.9)",
+                                        "rgb(74, 59, 133, 0.9)",
+                                        "rgb(173, 86, 205, 0.9)",
+                                        "rgb(161, 223, 255, 0.9)",
+                                        "rgb(62, 149, 205, 0.9)", 
+                                        "rgb(142, 94, 162, 0.9)",
+                                        "rgb(60, 186, 159, 0.9)",
+                                        "rgb(0, 137, 150, 0.9)",
+                                        "rgb(201, 76, 190, 0.9)",
+                                        "rgb(22, 184, 243, 0.9)"],
+                    borderColor: '#4a3b85',
+                    data: {{supplier_capacities_count|safe}}
+                }]
+            },
+
+            options: {
+                title:{
+                    display: true,
+                    text: 'Capacities by Potential Suppliers',
+                    fontSize: 14,
+                    fontColor: "#575a61"
+                },
+                legend:{
+                    display: true,
+                    position: 'left'
+                }
+            }
+        });
+
+        var ctx = document.getElementById('customerRegionChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{customer_regions|safe}},
+                datasets: [{
+                    label: 'Dataset',
+                    backgroundColor: ["rgb(97, 187, 182, 0.9)",
+                                        "rgb(74, 59, 133, 0.9)",
+                                        "rgb(173, 86, 205, 0.9)",
+                                        "rgb(161, 223, 255, 0.9)",
+                                        "rgb(62, 149, 205, 0.9)", 
+                                        "rgb(142, 94, 162, 0.9)",
+                                        "rgb(60, 186, 159, 0.9)",
+                                        "rgb(0, 137, 150, 0.9)",
+                                        "rgb(201, 76, 190, 0.9)",
+                                        "rgb(22, 184, 243, 0.9)"],
+                    borderColor: '#4a3b85',
+                    data: {{customer_regions_count}}
+                }]
+            },
+
+            options: {
+                title:{
+                    display: true,
+                    text: 'Customers by Regions',
+                    fontSize: 14,
+                    fontColor: "#575a61"
+                },
+                legend:{
+                    display: true,
+                    position: 'right'
+                }
+            }
+        });
+
+        //var customer_demands = "{{customer_demands|safe|escapejs}}";
+        //console.log(customer_demands);
+        //var customer_names = "{{customer_names|safe|escapejs}}";
+        //console.log(customer_names);
+
+        //var customer_names = JSON.parse(document.getElementById('customer_names_json').textContent);
+        //console.log(customer_names);
+
+        //var customer_names = document.getElementById("customer_names").value;
+        //var customer_demands = document.getElementById("customer_demands").value;
+
+        //var customer_demands = "{{customer_demands}}".replace(/&quot;/g,"\"");
+        //var customer_names = "{{customer_names}}".replace(/&quot;/g,"\"");
+
+        var ctx = document.getElementById('customerDemandChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{customer_names|safe}},
+                datasets: [{
+                    label: 'Demand',
+                    backgroundColor: ["rgb(97, 187, 182, 0.9)",
+                                        "rgb(74, 59, 133, 0.9)",
+                                        "rgb(173, 86, 205, 0.9)",
+                                        "rgb(161, 223, 255, 0.9)",
+                                        "rgb(62, 149, 205, 0.9)", 
+                                        "rgb(142, 94, 162, 0.9)",
+                                        "rgb(60, 186, 159, 0.9)",
+                                        "rgb(0, 137, 150, 0.9)",
+                                        "rgb(201, 76, 190, 0.9)",
+                                        "rgb(22, 184, 243, 0.9)"],
+                    borderColor: '#4a3b85',
+                    data: {{customer_demands|safe}}
+                }]
+            },
+
+            options: {
+                title:{
+                    display: true,
+                    text: 'Demand Amounts by Customers',
+                    fontSize: 14,
+                    fontColor: "#575a61"
+                },
+                legend:{
+                    display: false,
+                    position: 'right'
+                }
+            }
+        });
+
+        /*
+        var ctx = document.getElementById('myChart5').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Dataset',
+                    backgroundColor: ["rgb(97, 187, 182, 0.9)",
+                                        "rgb(74, 59, 133, 0.9)",
+                                        "rgb(173, 86, 205, 0.9)",
+                                        "rgb(161, 223, 255, 0.9)",
+                                        "rgb(62, 149, 205, 0.9)", 
+                                        "rgb(142, 94, 162, 0.9)",
+                                        "rgb(60, 186, 159, 0.9)"],
+                    borderColor: '#4a3b85',
+                    data: [0, 10, 5, 2, 20, 30, 45]
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+        */
+    </script>
+
+{% endblock content %}

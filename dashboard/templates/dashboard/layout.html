@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/corona.png' %}"/>
+
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/main.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/statistics.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/capacity-planning.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/demand-forecast.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/home.css'%}">
+    <!--Font Awesome Icons-->
+    <script src="https://kit.fontawesome.com/67fb477ebc.js"></script> 
+    <!--Chart.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+  
+</head>
+<body>
+    <div class="wrapper" id="wrapper">
+        <div class="top-navbar">
+            <div class="hamburger" id="hamburger">
+                <div></div>
+                <div class="second"></div>
+                <div></div>  
+            </div>
+            <div class="top-menu">
+                <div class="search-container">
+                    <form action="#">
+                      <input type="text" class="search" placeholder="Search.." name="search">
+                      <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+                <ul>
+                    <li><a href="/"><i class="fas fa-home"></i></a></li>
+                    <li><a href="{% url 'statistics' %}"><i class="fas fa-chart-pie"></i></a></li>
+                    <li><a href="{% url 'demand-forecast' %}"><i class="fas fa-chart-line"></i></a></li>
+                    <li><a href="{% url 'cost-calculation' %}"><i class="fas fa-dollar-sign"></i></a></li>
+                    <li><a href="{% url 'capacity-planning' %}"><i class="fas fa-industry"></i></a></li>
+                    <li><a href="{% url 'update-data' %}"><i class="fas fa-database"></i></a></li>
+                </ul> 
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="dashboard-name">Facility Location Dashboard</div>
+            <ul>
+                <li><a href="/" class="first">
+                    <span class="icon">
+                        <i class="fas fa-home fa-2x" aria-hidden="true"></i>
+                    </span>
+                    <span class="title">Home</span>               
+                </a></li>
+                <li><a href="{% url 'statistics' %}">
+                    <span class="icon">
+                        <i class="fas fa-chart-pie fa-2x" aria-hidden="true"></i>
+                    </span>
+                    <span class="title">Statistics</span>
+                </a></li>
+                <li><a href="{% url 'demand-forecast' %}">
+                    <span class="icon">
+                        <i class="fas fa-chart-line fa-2x" aria-hidden="true"></i>
+                    </span>
+                    <span class="title">Demand Forecast</span>
+                </a></li>
+                <li><a href="{% url 'cost-calculation' %}">
+                    <span class="icon">
+                        <i class="fas fa-dollar-sign fa-2x" aria-hidden="true"></i>
+                    </span>
+                    <span class="title">Cost Calculation</span>
+                </a></li>
+                <li><a href="{% url 'capacity-planning' %}">
+                    <span class="icon">
+                        <i class="fas fa-industry fa-2x" aria-hidden="true"></i>
+                    </span>
+                    <span class="title">Capacity Planning</span>
+                </a></li>
+                <li><a href="{% url 'update-data' %}">
+                    <span class="icon">
+                        <i class="fas fa-database fa-2x" aria-hidden="true"></i>
+                    </span>
+                    <span class="title">Update Data</span>
+                </a></li>
+            </ul>      
+        </div>
+        <div class="main-container">
+            {% block content %}
+            {% endblock %}         
+        </div>
+    </div>
+
+    <!--JavaScript-->  
+    <script>
+        var hamburger = document.getElementById('hamburger');
+        var wrapper = document.getElementById('wrapper');
+
+        hamburger.addEventListener('click', function(e){
+            wrapper.classList.toggle('collapse');
+            e.preventDefault();
+        });     
+    </script>
+
+</body>
+</html>
+

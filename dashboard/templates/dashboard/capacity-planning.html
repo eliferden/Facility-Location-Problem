@@ -1,0 +1,598 @@
+{% extends "dashboard/layout.html" %}
+
+{% block title %}
+    Capacity Planning
+{% endblock %}
+
+{% block content %}
+<!--
+    <form action="{% url 'capacity-planning' %}" method="POST"> 
+        {% csrf_token %}
+        <label for="your_name">Your name: </label>
+        <input id="your_name" type="text" name="your_name" value="name">
+        <input type="submit" value="OK">
+    </form>
+
+    <form action="{% url 'capacity-planning' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+-->
+<form action="{% url 'capacity-planning' %}" method="POST">
+    {% csrf_token %}
+    <div class="model-parameters">      
+        <p class="model-header">Model Parameters</p>
+        <div class="supplier-customer">
+            <div class="supplier-area" id="supplier-area">
+                <div class="supplier-header" id="supplier-header">
+                    <span>Supplier Parameters</span>
+                    <i class="fas fa-angle-down fa-2x first"></i>
+                    <i class="fas fa-angle-up fa-2x second"></i>
+                </div>
+                <div class="supplier-parameters">
+                    <div class="capacity-operating-cost-parameter">
+                        {% autoescape off %} {{supplier_data}} {% endautoescape %}
+                        <a href="{% url 'update-data' %}">
+                            <button type="button" class="btn">Update Supplier Parameters</button>
+                        </a>
+                    </div>
+                    <div class="supplier-optional-area">                      
+                        <span class="select-supplier"><i class="fas fa-angle-right"></i> Select suppliers that should be opened (optional): </span>
+                        <table class="select-supplier-table"> 
+                            <thead> 
+                                <tr> 
+                                    <th>Supplier</th> 
+                                </tr> 
+                            </thead> 
+                            <tbody> 
+                                {% for supplier in supplier_names %}
+                                <tr> 
+                                    <td>{{supplier}}</td> 
+                                    <td><input type="checkbox" class="regular-checkbox" id="{{supplier}}" name={{supplier}}></td> 
+                                </tr> 
+                                {% endfor %}
+                            </tbody> 
+                        </table>
+                        <div class="number-supplier">       
+                            <span><i class="fas fa-angle-right"></i> Number of suppliers to be opened (optional):</span>
+                            <input type="number" class="number-input" id="number-supplier" name="number-supplier" min="1" max="{{len_suppliers}}">
+                        </div>       
+                    </div>
+                </div>           
+            </div>
+            <div class="customer-area" id="customer-area">
+                <div class="customer-header" id="customer-header">
+                    <span>Customer Parameters</span>
+                    <i class="fas fa-angle-down fa-2x first"></i>
+                    <i class="fas fa-angle-up fa-2x second"></i>
+                </div>
+                <div class="customer-parameters">
+                    <div class="demand-parameter">
+                        {% autoescape off %} {{customer_data}} {% endautoescape %}
+                        <a href="{% url 'demand-forecast' %}">
+                            <button type="button" class="btn">Update Demands</button>
+                        </a>
+                    </div>
+                    <div class=customer-optional-area>       
+                        <span class="select-customer"><i class="fas fa-angle-right"></i> Enter unit costs of unsatisfied demand of customers (optional): </span>
+                        <table class="select-customer-table" border="1"> 
+                            <thead> 
+                                <tr> 
+                                    <th>Customer</th> 
+                                </tr> 
+                            </thead> 
+                            <tbody> 
+                                {% for customer in customer_names %}
+                                <tr> 
+                                    <td>{{customer}}</td> 
+                                    <td><input type="input" class="cost-input" id={{customer}} name="{{customer}}"></td> 
+                                </tr> 
+                                {% endfor %}
+                            </tbody> 
+                        </table>
+                        <div class="number-customer">                          
+                            <span><i class="fas fa-angle-right"></i> Percentage of customers to be fully satisfied (optional):</span>
+                            <input type="number" class="number-input" id="number-customer" name="number-customer" min="1" max="100">
+                        </div>    
+                    </div>
+                </div>               
+            </div>
+        </div>
+        <div class="error-area">
+            {% if error_messages %}
+                {% for error_message in error_messages %}
+                    <div class="error-message">
+                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                        {{error_message}}
+                    </div>                  
+                {% endfor %}
+            {% endif %}
+        </div>          
+        <div class="button-area">
+            <button type="reset" value="Reset" class="btn reset">
+                <i class="fas fa-redo"></i> Reset
+            </button>
+            <button type="submit" value="Solve" class="btn solve" name="solve">
+                <i class="fas fa-check"></i> Solve
+            </button>
+        </div>           
+    </div>
+    {% if output %}
+        <div class=output-session>
+            <p class="output-header">Output Session</p>
+            <div class="output-map">
+                <div class="map" id="map"></div>
+                <div class="map-info">
+                    <p class="map-info-header">Map Info</p>
+                    <div class="marker">
+                        <img src="http://maps.google.com/mapfiles/ms/icons/pink-dot.png" width="30" height="30" id="customer-icon" 
+                                class="marker-icon">: Only Customers     
+                    </div>
+                    <div class="marker">
+                        <img src="http://maps.google.com/mapfiles/ms/icons/ltblue-dot.png" width="30" height="30" id="supplier-icon" 
+                                class="marker-icon">: Only Suppliers
+                    </div>
+                    <div class="marker">
+                        <img src="http://maps.google.com/mapfiles/ms/icons/purple-dot.png" width="30" height="30" id="both-icon" 
+                                class="marker-icon">: Both
+                    </div>                    
+                </div>
+            </div>
+            <div class="objective-function">
+                <div class="model-status">
+                    Model Status: {{modelStatus}}
+                </div>
+                <div class="objective-value">
+                    Total Cost: {{objectiveValue}} ₺
+                </div>
+            </div>
+            <div class="decision-variables">
+                <p class="decision-header">Decision Variables</p>
+                <div class="supplier-customer-values">
+                    <div class="supplier-values">
+                        {% autoescape off %} {{supplierValues}} {% endautoescape %}                       
+                    </div>
+                    <div class="customer-values">
+                        {% if option %}
+                            {% autoescape off %} {{customerValues}} {% endautoescape %}
+                        {% endif %}
+                    </div>                       
+                </div>
+                <div class="shipping-amounts">
+                    <p class="shipping-header">Shipping Amounts from Suppliers to Customers:</p>    
+                    {% autoescape off %} {{shippingAmountValues}} {% endautoescape %}
+                </div>            
+            </div>                 
+            <button type="submit" class="export-btn" name="export">Export Results
+                <i class="fas fa-download" style="margin-left: 5px"></i>
+            </button>                
+        </div>
+    {% endif %}
+</form> 
+    
+
+<!--</i>-->
+
+<!--JavaScript-->  
+<script>
+    var map_dict = {{map_dict|safe}}; 
+    function initMap(){
+
+        //Map Options
+        var options = {
+            center: {lat: 38.9637, lng: 35.2433},
+            zoom: 6,
+            disableDefaultUI: true,
+            draggable: true,
+            scaleControl: false,
+            scrollwheel: false,
+            styles: [
+                {
+                    "elementType": "geometry",
+                    "stylers": [
+                    {
+                        "color": "#1d2c4d"
+                    }
+                    ]
+                },
+                {
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                    {
+                        "color": "#8ec3b9"
+                    }
+                    ]
+                },
+                {
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                    {
+                        "color": "#1a3646"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "administrative.country",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                    {
+                        "color": "#4b6878"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "administrative.land_parcel",
+                    "elementType": "labels",
+                    "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "administrative.land_parcel",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                    {
+                        "color": "#64779e"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "administrative.province",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                    {
+                        "color": "#4b6878"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "landscape.man_made",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                    {
+                        "color": "#334e87"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "landscape.natural",
+                    "elementType": "geometry",
+                    "stylers": [
+                    {
+                        "color": "#023e58"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "geometry",
+                    "stylers": [
+                    {
+                        "color": "#283d6a"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels.text",
+                    "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                    {
+                        "color": "#6f9ba5"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                    {
+                        "color": "#1d2c4d"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "poi.business",
+                    "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                    {
+                        "color": "#023e58"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                    {
+                        "color": "#3C7680"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "geometry",
+                    "stylers": [
+                    {
+                        "color": "#304a7d"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                    {
+                        "color": "#98a5be"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                    {
+                        "color": "#1d2c4d"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry",
+                    "stylers": [
+                    {
+                        "color": "#2c6675"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                    {
+                        "color": "#255763"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                    {
+                        "color": "#b0d5ce"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                    {
+                        "color": "#023e58"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road.local",
+                    "elementType": "labels",
+                    "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                    {
+                        "color": "#98a5be"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                    {
+                        "color": "#1d2c4d"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "transit.line",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                    {
+                        "color": "#283d6a"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "transit.station",
+                    "elementType": "geometry",
+                    "stylers": [
+                    {
+                        "color": "#3a4762"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": [
+                    {
+                        "color": "#e8ecf1"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                    {
+                        "color": "#4e6d70"
+                    }
+                    ]
+                }
+            ]
+        };
+
+        //Map
+        var map = new google.maps.Map(document.getElementById('map'), options);
+
+        /*
+        //Add Marker
+        var marker = new google.maps.Marker({
+            position: {lat: 39.9334, lng: 32.8597},
+            map: map,
+            icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+        });
+
+        //Add Info Window
+        var infoWindow = new google.maps.InfoWindow({
+            content: '<h1>Ankara</h1>'
+        });
+
+        marker.addListener('click', function(){
+            infoWindow.open(map, marker);
+        });
+
+        var m = document.getElementById('customer-icon')
+
+        m.addEventListener('click', function(e){
+            infoWindow.open(map, marker);
+            e.preventDefault();
+        });
+        */
+        
+       
+        for(var i = 0; i < map_dict.City.length; i++){
+            var iconImage;
+            if(map_dict.Type[i] == 'b'){
+                iconImage = "http://maps.google.com/mapfiles/ms/icons/purple-dot.png";
+                var iconType = document.getElementById('both-icon');
+            }
+            else if(map_dict.Type[i] == 'c'){
+                iconImage = "http://maps.google.com/mapfiles/ms/icons/pink-dot.png";
+                var iconType = document.getElementById('customer-icon');
+            }
+            else{
+                iconImage = "http://maps.google.com/mapfiles/ms/icons/ltblue-dot.png";
+                var iconType = document.getElementById('supplier-icon');
+            }
+
+            addMarker(coords=map_dict.Coords[i], iconImage=iconImage, cityName=map_dict.City[i], usedCapacity=map_dict['Used Capacity'][i], satisfiedDemand=map_dict['Satisfied Demand'][i], iconType=iconType);
+        }
+
+        //Add Marker Function
+        function addMarker(coords, iconImage, cityName, usedCapacity, satisfiedDemand, iconType){
+            var marker = new google.maps.Marker({
+                position: coords,
+                map: map,
+                icon: iconImage
+            });
+
+            var content;
+            if(usedCapacity == '-'){
+                content = `<h2 style="color: #023e58">${cityName}</h2><p style="color: #663399">Satisfied Demand: ${satisfiedDemand}</p>`
+            }
+            else if(satisfiedDemand == '-'){
+                content = `<h2 style="color: #023e58">${cityName}</h2><p style="color: #4a3b85">Used Capacity: ${usedCapacity}</p>`
+            }
+            else{
+                content = `<h2 style="color: #023e58">${cityName}</h2><p style="color: #4a3b85">Used Capacity: ${usedCapacity}</p><p style="color: #663399">Satisfied Demand: ${satisfiedDemand}</p>`
+            }
+
+            var infoWindow = new google.maps.InfoWindow({
+                content: content            
+            });
+
+            marker.addListener('click', function(){
+                infoWindow.open(map, marker);
+            });
+
+            iconType.addEventListener('click', function(e){
+                infoWindow.open(map, marker);
+                e.preventDefault();
+            });
+        }
+
+        var customer_icon = document.getElementById('customer-icon')
+        var supplier_icon = document.getElementById('supplier-icon')
+        var both_icon = document.getElementById('both-icon')
+
+        customer_icon.addEventListener('click', function(e){
+            infoWindow.open(map, marker);
+            e.preventDefault();
+        });
+
+    }
+</script>
+<!--Google Maps API-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCU6WFmb7G9boCKH7Y8NAuf2DnTRArvxsE&callback=initMap"
+async defer></script>
+
+<script>
+    var supplier_header = document.getElementById('supplier-header');
+    var supplier_area = document.getElementById('supplier-area');
+
+    var customer_header = document.getElementById('customer-header');
+    var customer_area = document.getElementById('customer-area');
+
+    supplier_header.addEventListener('click', function(e){
+        supplier_area.classList.toggle('show');
+        e.preventDefault();
+    });
+
+    customer_header.addEventListener('click', function(e){
+        customer_area.classList.toggle('show');
+        e.preventDefault();
+    });
+</script>
+
+{% endblock content %}

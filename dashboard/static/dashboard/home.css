@@ -1,0 +1,138 @@
+
+.home-wrapper{
+    width: 100%;
+    height: calc(100% - 65px);
+    display: block;
+}
+
+.home-header{
+    display: block;
+    margin-bottom: 20px;
+}
+
+.home-header .header1{
+    color: #4a3b85;
+}
+
+.home-header .header2{
+    color: purple;
+}
+
+.home-wrapper .row1{
+    display: flex;
+    justify-content: center !important;
+}
+
+.home-wrapper .row1 .st, .home-wrapper .row1 .df{
+    border: 2px solid whitesmoke;
+    height: 200px;
+    width: calc(100% - 300px);
+    text-align: center;
+    box-shadow: 0px 4px 11px 1px rgba(0,0,0,0.58);
+    display: block;
+}
+
+.home-wrapper .row1 .st{
+    /*background-image: url("../img/pink-clouds.jpg");*/
+    background: whitesmoke;   
+}
+
+.home-wrapper .row1 .df{
+    margin-left: 350px;
+    background: whitesmoke;
+}
+
+.home-wrapper .row1 .st:hover, .home-wrapper .row1 .df:hover{
+    background: white;
+    border: 2px solid purple;
+}
+
+.home-wrapper .row3{
+    display: flex;
+    justify-content: center !important;
+}
+
+.home-wrapper .row3 .ud, .home-wrapper .row3 .cc{
+    border: 2px solid whitesmoke;
+    height: 200px;
+    width: calc(100% - 300px);
+    margin-top: -200px;
+    text-align: center;
+    box-shadow: 0px 4px 11px 1px rgba(0,0,0,0.58);
+    display: block;  
+}
+
+.home-wrapper .row3 .cc{
+    margin-left: 350px;
+    background: whitesmoke;
+}
+
+.home-wrapper .row3 .ud{
+    background: whitesmoke;
+}
+
+.home-wrapper .row3 .ud:hover, .home-wrapper .row3 .cc:hover{
+    background: white;
+    border: 2px solid purple;
+}
+
+.home-wrapper .row2{
+    display: flex;
+    justify-content: center !important;
+}
+
+.home-wrapper .row2 .img1{
+    margin-left: -300px;
+}
+
+.home-wrapper .row2 .cp{
+    border: 2px solid whitesmoke;
+    height: 500px;
+    width: 300px;
+    margin-top: -200px;
+    text-align: center;
+    background: whitesmoke;
+    box-shadow: 0px 4px 11px 1px rgba(0,0,0,0.58);
+    display: block; 
+}
+
+.home-wrapper .row2 .cp:hover{
+    background: white;
+    border: 2px solid purple;
+}
+
+.home-wrapper button{
+    margin-top: 30px;
+    background: #61bbb6;
+    border-radius: 50px;
+    padding: 5px 10px;
+    height: 30px;
+    width: 100px;
+    color: white;
+    border: 1px solid #61bbb6;
+}
+
+.home-wrapper button:hover{
+    cursor: pointer;
+    background: white;
+    color: #61bbb6;
+}
+
+.st, .df, .cp, .ud, .cc{
+    padding: 10px;
+}
+
+.home-content-header{
+    color: #c191df;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.home-content{
+    margin-top: 10px;
+    font-size: 14px;
+    color: grey;
+    font-weight: 500;
+}
+
+

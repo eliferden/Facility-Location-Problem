@@ -1,0 +1,48 @@
+{% extends "dashboard/layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+
+<div class="home-wrapper">
+  <div class="home-header">
+    <h2 class="header1">Welcome to Facility Location Dashboard!</h2>
+    <p class="header2">Find the optimum solutions for your supply chain</p>
+  </div>
+  <div class="row1">
+      <div class="st">
+          <div class="home-content-header"><span>Statistics</span></div>
+          <div class="home-content"><span>Explore detailed statistics by customers and suppliers and analyze the current situation!</span></div>
+          <div><button>More</button></div>             
+      </div>
+      <div class="df">
+          <div class="home-content-header"><span>Demand Forecast</span></div>
+          <div class="home-content"><span>Examine historical sales data according to customers and forecast demands for future periods through statistical time series analyses!</span></div>
+          <div><button>More</button></div>               
+      </div>
+  </div>
+  <div class="row2">
+    <div class="cp">
+      <div class="home-content-header"><span>Capacity Planning</span></div>
+      <div class="home-content"><span>Find the optimum shipping amounts for your supply chain network by optimization modeling methods for facility location problem!</span></div>
+      <img src="../static/img/logistics.png" alt="" width="250" height="250" style="margin-top: 20px;">
+      <div><button>More</button></div>      
+    </div>
+  </div> 
+  <div class="row3">
+    <div class="ud"> 
+        <div class="home-content-header"><span>Update Data</span></div>
+        <div class="home-content"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua!</span></div>
+        <div><button>More</button></div>    
+    </div>
+    <div class="cc">
+        <div class="home-content-header"><span>Cost Calculation</span></div>
+        <div class="home-content"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua!</span></div>
+        <div><button>More</button></div>    
+    </div>
+  </div>
+</div>
+   
+{% endblock content %} 

@@ -1,0 +1,84 @@
+.header{
+    color: #4a3b85;
+    display: block;
+    margin-top: 10px;
+    margin-left: 30px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.header-statistics{
+    color: #c191df;
+    display: block;
+    margin-top: 10px;
+    margin-left: 30px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.chart-area{
+    margin: 40px;
+    display: block;
+}
+
+.supplier-customer-area{
+    display: flex;
+}
+
+.supplier-charts{
+    display: block;
+    border: 1px solid #abb0be;
+    border-radius: 10px;
+    background: rgb(245, 245, 245, 0.4);
+    width: auto;
+    height: auto;
+}
+
+.supplier-charts:hover{
+    background: white;
+}
+
+.supplier-chart-1{
+    margin-top: 20px;
+    height: 40vh; 
+    width: 35vw;
+}
+
+.supplier-chart-2{
+    height: 40vh; 
+    width: 35vw;
+}
+
+.customer-charts{
+    display: block;
+    border: 1px solid #abb0be;
+    border-radius: 10px;
+    background: rgb(245, 245, 245, 0.4);
+    width: auto;
+    height: auto;
+    margin-left: 30px;;
+}
+
+.customer-charts:hover{
+    background: white;
+}
+
+.customer-chart-1{
+    margin-top: 20px;
+    height: 40vh; 
+    width: 35vw;
+}
+
+.customer-chart-2{
+    height: 40vh; 
+    width: 35vw; 
+}
+
+
+
+
+
+
+
+    

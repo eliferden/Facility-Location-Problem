@@ -1,0 +1,168 @@
+.forecast-wrapper{
+    display: block;
+}
+
+.select-customers{
+    display: block;
+    border: 2px solid #abb0be;
+    border-radius: 2px;
+    background: white;
+    height: 580px; 
+}
+
+.select-header{
+    color: #c191df;
+    margin-left: 25px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-top: 10px;
+}
+
+.select-section{
+    display: flex;
+    background: #4a3b85;
+    padding: 12px;
+    margin: 20px 50px;
+    /*width: 65.88vw;*/
+    height: 10vh; 
+    border-radius: 50px;
+    color: whitesmoke;
+    align-items: center;
+    width: calc(100% - 80px) !important;  
+}
+
+.select-section label{
+    margin-left: 30px;
+}
+
+.select-section .select{
+    margin-left: 10px;
+    height: 40px;
+    width: 120px;
+    font-size: 14px;
+    background: whitesmoke;
+    border-radius: 5px;
+}
+
+.select-section .select:hover{
+    background: white;
+}
+
+.select-section .select-btn, .select-section .update-btn{
+    border: 2px solid #552774;
+    background-color: #61bbb6;
+    color: whitesmoke;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 5px;
+    height: 40px;  
+    border-radius: 10px;
+}
+
+.select-section .select-btn{
+    margin-left: 10px;
+    width: 100px;
+}
+
+.select-section .update-btn{
+    margin-left: 200px;
+    width: 200px;
+}
+
+.select-section .select-btn:hover, .select-section .update-btn:hover{
+    cursor: pointer;
+    background: white;
+    color: #61bbb6;
+}
+
+.sale-chart{
+    margin-top: 10px;
+    height: 200px; 
+    width: 850px;
+    margin-left: 50px;
+}
+
+.demand-forecast{
+    display: block;
+    margin-top: 30px;
+    height: 600px;
+}
+
+.forecast-header{
+    color: #c191df;
+    margin-left: 25px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-top: 10px;
+}
+
+.forecast-buttons{
+    display: flex;
+    margin-top: 30px;
+    margin-left: 25px;
+}
+
+.ma-btn, .lr-btn{
+    border: 2px solid #392b42;
+    background-color: #6655a5;
+    color: whitesmoke;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 15px;
+    height: 50px; 
+    width: 250px; 
+}
+
+.ma-btn{
+    margin-left: 200px;
+}
+
+.lr-btn{
+    margin-left: 80px;
+}
+
+.ma-btn:hover, .lr-btn:hover{
+    cursor: pointer;
+    background: whitesmoke;
+    color: #6655a5;
+
+}
+
+.forecast-chart{
+    margin-top: 20px;
+    height: 45vh; 
+    width: 67vw;
+    margin-left: 50px;
+}
+
+.update-demand-btn{
+    margin-top: 200px;
+    margin-left: 425px;
+    border: 2px solid #61bbb6;
+    background-color: #61bbb6;
+    color: whitesmoke;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 15px;
+    height: 70px; 
+    width: 200px; 
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.update-demand-btn:hover{
+    cursor: pointer;
+    background: whitesmoke;
+    color: #61bbb6;
+}
